@@ -7,31 +7,58 @@ class HelpDropdown(discord.ui.Select):
     def __init__(self, bot):
         self.bot = bot
         options = [
-            discord.SelectOption(label="🔹 Alle Befehle", description="Zeigt alle verfügbaren Befehle", value="all"),
+            discord.SelectOption(label="📜 Alle Befehle", description="Zeigt alle Befehle", value="all"),
             discord.SelectOption(label="🔧 Admin-Befehle", description="Zeigt nur Admin-Befehle", value="admin"),
+            discord.SelectOption(label="ℹ Help-Befehle", description="Zeigt Befehle für das Hilfe-System", value="help"),
         ]
         super().__init__(placeholder="Wähle eine Kategorie...", options=options)
 
     async def callback(self, interaction: discord.Interaction):
         """Wird ausgeführt, wenn der Benutzer eine Option auswählt."""
+        embed = discord.Embed(color=discord.Color.blue())
+
         if self.values[0] == "all":
-            embed = discord.Embed(title="📜 Alle Befehle", color=discord.Color.blue())
-            embed.add_field(name="🔹 `!help`", value="Zeigt dieses Hilfe-Menü", inline=False)
-            embed.add_field(name="🔹 `!echo [Text]`", value="Wiederholt eine Nachricht", inline=False)
-            embed.add_field(name="🔹 `!info`", value="Zeigt Infos über den Bot", inline=False)
-            embed.add_field(name="🔧 `!clear [Anzahl]`", value="Löscht Nachrichten (Admin)", inline=False)
-            embed.add_field(name="🔧 `!kick @Benutzer`", value="Kickt einen Benutzer (Admin)", inline=False)
-            embed.add_field(name="🔧 `!ban @Benutzer`", value="Bannt einen Benutzer (Admin)", inline=False)
-            embed.set_footer(text="Nutze /help für weitere Infos")
-        
-        elif self.values[0] == "admin":
-            embed = discord.Embed(title="🔧 Admin-Befehle", color=discord.Color.red())
+            embed.title = "📜 Alle Befehle"
+            embed.description = "**Normale Befehle:**\n"
+            embed.add_field(name="📢 `!help`", value="Zeigt dieses Hilfe-Menü", inline=False)
+            embed.add_field(name="📢 `!echo [Text]`", value="Wiederholt eine Nachricht", inline=False)
+            embed.add_field(name="📢 `!info`", value="Zeigt Infos über den Bot", inline=False)
+
+            embed.description += "\n**Admin-Befehle:**\n"
             embed.add_field(name="🔧 `!clear [Anzahl]`", value="Löscht Nachrichten", inline=False)
             embed.add_field(name="🔧 `!kick @Benutzer`", value="Kickt einen Benutzer", inline=False)
             embed.add_field(name="🔧 `!ban @Benutzer`", value="Bannt einen Benutzer", inline=False)
             embed.add_field(name="🔧 `!unban Benutzername`", value="Entbannt einen Benutzer", inline=False)
-            embed.set_footer(text="Nur Admins können diese Befehle ausführen!")
+            embed.add_field(name="🔧 `!mute @Benutzer`", value="Stummschaltet einen Benutzer", inline=False)
+            embed.add_field(name="🔧 `!unmute @Benutzer`", value="Hebt die Stummschaltung auf", inline=False)
+            embed.add_field(name="🔧 `!poll Frage Option1 Option2 ...`", value="Erstellt eine Umfrage", inline=False)
+            embed.add_field(name="🔧 `!set_nickname @Benutzer NeuerName`", value="Ändert den Nickname", inline=False)
+            embed.add_field(name="🔧 `!lock_channel`", value="Sperrt den Kanal", inline=False)
+            embed.add_field(name="🔧 `!unlock_channel`", value="Entsperrt den Kanal", inline=False)
+            embed.add_field(name="🔧 `!create_role Rollenname`", value="Erstellt eine neue Rolle", inline=False)
+            embed.add_field(name="🔧 `!delete_role Rollenname`", value="Löscht eine Rolle", inline=False)
 
+        elif self.values[0] == "admin":
+            embed.title = "🔧 Admin-Befehle"
+            embed.add_field(name="🔧 `!clear [Anzahl]`", value="Löscht Nachrichten", inline=False)
+            embed.add_field(name="🔧 `!kick @Benutzer`", value="Kickt einen Benutzer", inline=False)
+            embed.add_field(name="🔧 `!ban @Benutzer`", value="Bannt einen Benutzer", inline=False)
+            embed.add_field(name="🔧 `!unban Benutzername`", value="Entbannt einen Benutzer", inline=False)
+            embed.add_field(name="🔧 `!mute @Benutzer`", value="Stummschaltet einen Benutzer", inline=False)
+            embed.add_field(name="🔧 `!unmute @Benutzer`", value="Hebt die Stummschaltung auf", inline=False)
+            embed.add_field(name="🔧 `!poll Frage Option1 Option2 ...`", value="Erstellt eine Umfrage", inline=False)
+            embed.add_field(name="🔧 `!set_nickname @Benutzer NeuerName`", value="Ändert den Nickname", inline=False)
+            embed.add_field(name="🔧 `!lock_channel`", value="Sperrt den Kanal", inline=False)
+            embed.add_field(name="🔧 `!unlock_channel`", value="Entsperrt den Kanal", inline=False)
+            embed.add_field(name="🔧 `!create_role Rollenname`", value="Erstellt eine neue Rolle", inline=False)
+            embed.add_field(name="🔧 `!delete_role Rollenname`", value="Löscht eine Rolle", inline=False)
+
+        elif self.values[0] == "help":
+            embed.title = "ℹ Help-Befehle"
+            embed.add_field(name="📢 `!help`", value="Zeigt dieses Hilfe-Menü", inline=False)
+            embed.add_field(name="📢 `!info`", value="Zeigt Infos über den Bot", inline=False)
+
+        embed.set_footer(text="Wähle eine andere Kategorie im Dropdown-Menü!")
         await interaction.response.edit_message(embed=embed, view=self.view)
 
 

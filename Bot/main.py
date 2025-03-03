@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 import asyncio
-import config  # Importiert die Token-Datei
+import config  # Token aus config.py laden
 
 intents = discord.Intents.default()
 intents.members = True
@@ -13,14 +13,14 @@ bot = commands.Bot(command_prefix="!", intents=intents, help_command=None)
 async def on_ready():
     print(f'✅ Bot ist online als {bot.user}')
 
-# Lade Cogs (Admin- und Help-Commands)
+# Lade Cogs
 async def load_cogs():
-    await bot.load_extension("admin_commands")
-    await bot.load_extension("help_command")
+    await bot.load_extension("admin_commands")  
+    await bot.load_extension("help_command")  # Help-Cog laden
 
 async def main():
     async with bot:
         await load_cogs()
-        await bot.start(config.BOT_TOKEN)  # Token aus config.py laden
+        await bot.start(config.BOT_TOKEN)
 
 asyncio.run(main())
